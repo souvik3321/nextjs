@@ -15,6 +15,7 @@ from app.services.places_service import search_places
 from app.services.budget_service import build_budget_breakdown
 from app.services.advisory_service import fetch_travel_advisories
 from app.services.validation_service import validate_recommendations
+from app.schemas import TripRequest
 
 load_dotenv()
 
@@ -26,30 +27,6 @@ templates_dir = os.path.join(current_dir, "templates")
 
 app.mount("/static", StaticFiles(directory=static_dir), name="static")
 templates = Jinja2Templates(directory=templates_dir)
-
-
-class TripRequest(BaseModel):
-    destination_city: str
-    destination_country: Optional[str] = None
-    base_location_city: str
-    base_location_country: Optional[str] = None
-    start_date: date
-    end_date: date
-    num_travelers: int
-    trip_type: str
-    dietary_restrictions: Optional[str] = None
-    budget_currency: str = "USD"
-    max_budget: Optional[float] = None
-    accessibility_needs: Optional[str] = None
-    traveler_ages: Optional[str] = None  # e.g., "2 adults, 1 child (6)"
-
-    @field_validator("end_date")
-    @classmethod
-    def end_after_start(cls, v: date, info):
-        start = info.data.get("start_date")
-        if start and v < start:
-            raise ValueError("End date must be on or after start date")
-        return v
 
 
 @app.get("/", response_class=HTMLResponse)

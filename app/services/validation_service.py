@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import List, Dict, Any
-from app.main import TripRequest
+from app.schemas import TripRequest
 
 
 def validate_recommendations(
