@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Travel Planner – Questionnaire</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Plan your trip</h1>
+    <form action="/plan" method="post" class="form-grid">
+      <fieldset>
+        <legend>Destination details</legend>
+        <label>Destination city<input type="text" name="destination_city" required /></label>
+        <label>Destination country (2-letter code optional)<input type="text" name="destination_country" placeholder="US, FR, JP" maxlength="2" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Base location</legend>
+        <label>Home city<input type="text" name="base_location_city" required /></label>
+        <label>Home country (2-letter code optional)<input type="text" name="base_location_country" maxlength="2" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Travel dates</legend>
+        <label>Start date<input type="date" name="start_date" required /></label>
+        <label>End date<input type="date" name="end_date" required /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Travelers</legend>
+        <label>Number of travelers<input type="number" name="num_travelers" min="1" value="1" required /></label>
+        <label>Traveler ages (optional)<input type="text" name="traveler_ages" placeholder="2 adults, 1 child (6)" /></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Preferences</legend>
+        <label>Trip type
+          <select name="trip_type" required>
+            <option>leisure</option>
+            <option>business</option>
+            <option>adventure</option>
+            <option>romantic</option>
+            <option>family</option>
+            <option>cultural</option>
+          </select>
+        </label>
+        <label>Dietary restrictions/allergens (optional)
+          <input type="text" name="dietary_restrictions" placeholder="vegetarian, gluten-free, nut allergy" />
+        </label>
+        <label>Accessibility needs (optional)
+          <input type="text" name="accessibility_needs" placeholder="wheelchair access, hearing assistance" />
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Budget</legend>
+        <label>Currency
+          <select name="budget_currency">
+            <option>USD</option>
+            <option>EUR</option>
+            <option>GBP</option>
+            <option>JPY</option>
+            <option>AUD</option>
+            <option>CAD</option>
+          </select>
+        </label>
+        <label>Max total budget (optional)
+          <input type="number" name="max_budget" min="0" step="0.01" placeholder="e.g. 2500" />
+        </label>
+      </fieldset>
+
+      <div class="actions">
+        <button type="submit">Get Recommendations</button>
+      </div>
+    </form>
+  </main>
+</body>
+</html>

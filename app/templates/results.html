@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Trip Recommendations</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <h1>Personalized Travel Recommendations</h1>
+
+    <section>
+      <h2>Trip Overview</h2>
+      <ul>
+        <li><strong>Destination</strong>: {{ trip.destination_city }}{% if trip.destination_country %}, {{ trip.destination_country }}{% endif %}</li>
+        <li><strong>From</strong>: {{ trip.base_location_city }}{% if trip.base_location_country %}, {{ trip.base_location_country }}{% endif %}</li>
+        <li><strong>Dates</strong>: {{ trip.start_date }} → {{ trip.end_date }}</li>
+        <li><strong>Travelers</strong>: {{ trip.num_travelers }}{% if trip.traveler_ages %} ({{ trip.traveler_ages }}){% endif %}</li>
+        <li><strong>Trip type</strong>: {{ trip.trip_type }}</li>
+        {% if trip.dietary_restrictions %}<li><strong>Dietary</strong>: {{ trip.dietary_restrictions }}</li>{% endif %}
+        {% if trip.accessibility_needs %}<li><strong>Accessibility</strong>: {{ trip.accessibility_needs }}</li>{% endif %}
+        {% if trip.max_budget %}<li><strong>Max budget</strong>: {{ trip.max_budget }} {{ trip.budget_currency }}</li>{% endif %}
+      </ul>
+    </section>
+
+    {% if warnings %}
+    <section class="warnings">
+      <h2>Warnings & Considerations</h2>
+      <ul>
+        {% for w in warnings %}<li>{{ w }}</li>{% endfor %}
+        {% if advisories and advisories.message %}<li>{{ advisories.message }}</li>{% endif %}
+      </ul>
+    </section>
+    {% endif %}
+
+    <section>
+      <h2>Top 5 Flight Options</h2>
+      <ol>
+        {% for f in flights %}
+        <li>
+          <div class="card">
+            <div><strong>Price</strong>: {{ f.price }} {{ f.currency }}</div>
+            <div><strong>Duration</strong>: {{ f.duration }}</div>
+            <div><strong>Airline</strong>: {{ f.airline }}</div>
+            <div><strong>Layovers</strong>: {% if f.layovers and f.layovers|length > 0 %}{{ f.layovers | join(", ") }}{% else %}Non-stop{% endif %}</div>
+            <div><strong>Total travel time</strong>: {{ f.total_travel_time }} minutes</div>
+            {% if f.booking_url %}<div><a target="_blank" rel="noopener" href="{{ f.booking_url }}">Book</a></div>{% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section>
+      <h2>Top 5 Hotel Recommendations</h2>
+      <ol>
+        {% for h in hotels %}
+        <li>
+          <div class="card">
+            <div><strong>Name</strong>: {{ h.name }}</div>
+            <div><strong>Price per night</strong>: {{ h.price_per_night }} {{ h.currency }}</div>
+            <div><strong>Location rating</strong>: {{ h.location_rating }}</div>
+            <div><strong>Amenities</strong>: {{ h.amenities | join(', ') }}</div>
+            <div><strong>User reviews</strong>: {{ h.user_reviews }}</div>
+            <div><strong>Proximity</strong>: {{ h.proximity }}</div>
+            {% if h.accessibility %}<div><strong>Accessibility</strong>: {{ h.accessibility | join(', ') if h.accessibility is iterable else h.accessibility }}</div>{% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section>
+      <h2>Top 5 Must-Visit Places</h2>
+      <ol>
+        {% for p in places %}
+        <li>
+          <div class="card">
+            <div><strong>Name</strong>: {{ p.name }}</div>
+            <div><strong>Estimated visit duration</strong>: {{ p.estimated_duration_hours }} hours</div>
+            <div><strong>Ticket/entry costs</strong>: {{ p.ticket_cost }} {{ budget.currency }}</div>
+            <div><strong>Best time to visit</strong>: {{ p.best_time }}</div>
+            <div><strong>Cultural/historical significance</strong>: {{ p.significance }}</div>
+            <div><strong>Accessibility</strong>: {{ p.accessibility }}</div>
+          </div>
+        </li>
+        {% endfor %}
+      </ol>
+    </section>
+
+    <section>
+      <h2>Comprehensive Budget Breakdown</h2>
+      <ul>
+        <li><strong>Estimated total trip cost</strong>: {{ budget.estimated_total }} {{ budget.currency }}</li>
+      </ul>
+      <div class="grid">
+        <div class="card"><strong>Flights</strong><div>{{ budget.by_category.flights.amount }} {{ budget.currency }}</div></div>
+        <div class="card"><strong>Accommodation</strong><div>{{ budget.by_category.accommodation.amount }} {{ budget.currency }}</div></div>
+        <div class="card"><strong>Activities</strong><div>{{ budget.by_category.activities.amount }} {{ budget.currency }}</div></div>
+        <div class="card"><strong>Food</strong><div>{{ budget.by_category.food.amount }} {{ budget.currency }}</div></div>
+      </div>
+      {% if budget.tips %}
+      <h3>Cost-saving recommendations</h3>
+      <ul>
+        {% for t in budget.tips %}<li>{{ t }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    </section>
+
+    <div class="actions">
+      <a href="/">Plan another trip</a>
+    </div>
+  </main>
+</body>
+</html>
